@@ -486,15 +486,26 @@ if (0) {
 ?>
 <!--
 # --- BEGIN PLUGIN HELP ---
-<h1>aro_myadmin</h1>
 
-	<p>Just copy myadmin.css to the /textpattern folder and the included images to the /textpattern/txp_image folder. Install and activate the plugin and you&#8217;re good to go. If you want the real deal though, you will have to add 1 line to /textpattern/index.php:</p>
 
-	<p><code>load_plugin(basename(&#39;aro_myadmin&#39;));</code></p>
+h1. aro_myadmin
 
-	<p>Add the above to ~line 88 of index.php &#8211; it must come before doAuth();</p>
+Just copy myadmin.css to the /textpattern folder and the included images to the /textpattern/txp_image folder. Install and activate the plugin and you&#8217;re good to go. If you want the real deal though, you will have to add 1 line to /textpattern/index.php:
 
-	<p>Replace the image <em>sitelink.gif</em> and <em>favicon.ico</em> with the appropriate images for your site. Create a form with the name <strong>aro_dashboard</strong> to overwrite the plugin dashboard.</p>
+@load_plugin(basename("aro_myadmin"));@
+
+Add the above to ~line 88 of index.php - it must come before doAuth();
+
+Replace the image _sitelink.gif_ and _favicon.ico_ with the appropriate images for your site. Create a form with the name *aro_dashboard* to overwrite the plugin dashboard.
+
+h2. Special Thanks
+
+Special thanks to Steve AKA "Netcarver":http://txp-plugins.netcarving.com/ for his work getting the code to play nice with other TXP plugins.
+
+h2. Contributions
+
+This plugin is open-source, if you would like to make a code contribution please checkout a copy of the plugin from the "repository":http://github.com/rloaderro/aro_myadmin/tree/master.
+
 # --- END PLUGIN HELP ---
 -->
 <?php
