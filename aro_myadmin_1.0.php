@@ -388,7 +388,12 @@ function aro_pagetop($message){
 	$out[] = '<div id="header">';
 	$out[] = '<h1 class="branding"><a href="'.hu.'" title="'.gTxt('tab_view_site').'"><img src="txp_img/sitelink.gif" alt="'.$sitename.'" /></a></h1>';
 
-	if ($txp_user) $out[] = '<p class="user">'.$txp_user.' - <a href="index.php?event=admin">'.gTxt('prefs').'</a> | <a href="index.php?logout=1">'.gTxt('logout').'</a></p>';
+	if ($txp_user)
+	{
+		$ev = (has_privs('prefs')) ? 'prefs' : 'admin' ;
+		$lang_sel = (is_callable('_l10n_inject_switcher_form')) ? _l10n_inject_switcher_form() . ' | ' : '';
+		$out[] = '<div class="user">'.$txp_user.' - '.$lang_sel.'<a href="index.php?event='.$ev.'">'.gTxt('prefs').'</a> | <a href="index.php?logout=1">'.gTxt('logout').'</a></div>';
+	}
 
 	if (!$bm && $txp_user){
 		// primary navigation
