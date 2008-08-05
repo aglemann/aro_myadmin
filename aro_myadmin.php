@@ -584,7 +584,6 @@ if (0) {
 ?>
 <!--
 # --- BEGIN PLUGIN HELP ---
-
 h1. aro_myadmin
 
 Just copy myadmin.css to the /textpattern folder and the included images to the /textpattern/txp_image folder. Install and activate the plugin and you&#8217;re good to go. If you want the real deal though, you will have to add 1 line to /textpattern/index.php:
