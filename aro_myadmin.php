@@ -16,7 +16,7 @@ global $aro_myadmin_strings;
 if (!is_array($aro_myadmin_strings))
 {
 	$aro_myadmin_strings = array(
-		'login_welcome' => 'Welcome <strong>{user}</strong>. If you are not {user}, <strong><a href="?logout=1">logout</a></strong> immediately.',
+		'login_welcome' => 'Welcome <strong>{name}</strong>/{user}. If you are not {name}, <strong><a href="?logout=1">logout</a></strong> immediately.',
 		'footer_login'	=> '<p class="textpattern">Powered by <a href="http://www.textpattern.com">Textpattern</a></p>',
 		'footer_other'	=> '<p class="textpattern">Powered by <a href="http://www.textpattern.com">Textpattern</a></p>',
 	);
@@ -92,7 +92,8 @@ function aro_dashboard() {
 	$prev = gps('prev');
 	$msg = '';
 	if( $prev === 'login' ) {
-		$msg = aro_myadmin_gTxt('login_welcome',array('{user}'=>$txp_user));
+		$name = safe_field( 'RealName' , 'txp_users' , '`name`=\''.doSlash($txp_user).'\'' );
+		$msg = aro_myadmin_gTxt('login_welcome',array( '{name}'=>$name, '{user}'=>$txp_user ) );
 	}
 	echo pagetop('Textpattern' , $msg);
 
