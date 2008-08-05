@@ -26,14 +26,57 @@ function aro_bootstrap() {
 	if ($_POST && isset($_POST['p_password'])) header('Location: ?event=dashboard');
 }
 
+function aro_load_dash( $label , $dash , $debug=false ) {
+	$html = safe_field('Form','txp_form','name=\''.$dash.'\'');
+	if ($debug) echo (!$html) ? "No form called $dash".br.n : "Loaded $label dash: [$dash]".br.n;
+	return $html;
+}
+
 function aro_dashboard() {
+	include_once txpath.'/publish.php';
+	global $txp_user;
+
 	echo pagetop("Textpattern");
 
-	include_once txpath.'/publish.php';
+	$debug = false;
+	$html = false;
 
-	$html = safe_field('Form','txp_form',"name='aro_dashboard'");
+	if( $debug ) echo 'User: ['.$txp_user.']'.br.n;
+
+	# Try loading user-specific form, then priv-specific, else global, else default...
+	$label = 'user-specific';
+	if( !empty($txp_user)) {
+		$dash = 'aro_myadmin_dash_' . $txp_user;
+		$html = aro_load_dash( $label, $dash, $debug );
+	}
+	else {
+		if ($debug) echo 'Skipped lookup of '.$label.' dashboard.'.br.n;
+	}
+
+	$label = 'priv-specific';
+	if (!empty($txp_user) && !$html) {
+		global $privs;
+		if( isset($privs)) {
+			$dash = 'aro_myadmin_dash_' . $privs;
+			$html = aro_load_dash( $label, $dash, $debug );
+		}
+	} else {
+		if ($debug) echo 'Skipped lookup of '.$label.' dashboard.'.br.n;
+	}
+
+	$label = 'global';
+	if( !$html ) {
+		$dash = 'aro_myadmin_dash';
+		$html = aro_load_dash( $label, $dash, $debug );
+	}
+	else {
+		if ($debug) echo 'Skipped lookup of '.$label.' dashboard.'.br.n;
+	}
+	unset($label);
+
 
 	if (!$html){
+		if ($debug) echo 'Using default dashboard.'.br.n;
 		$html = <<<html
 <div class="dashboard">
   <div>
@@ -481,7 +524,6 @@ if (0) {
 <!--
 # --- BEGIN PLUGIN HELP ---
 
-
 h1. aro_myadmin
 
 Just copy myadmin.css to the /textpattern folder and the included images to the /textpattern/txp_image folder. Install and activate the plugin and you&#8217;re good to go. If you want the real deal though, you will have to add 1 line to /textpattern/index.php:
@@ -490,7 +532,14 @@ Just copy myadmin.css to the /textpattern folder and the included images to the 
 
 Add the above to ~line 88 of index.php - it must come before doAuth();
 
-Replace the image _sitelink.gif_ and _favicon.ico_ with the appropriate images for your site. Create a form with the name *aro_dashboard* to overwrite the plugin dashboard.
+Replace the image _sitelink.gif_ and _favicon.ico_ with the appropriate images for your site. Create a form with the name *aro_myadmin_dash* to overwrite the plugin dashboard.
+
+You can give individual adminstrative users their own dashboard form by creating a form called *aro_myadmin_dash_USERLOGIN*. So if you have a user who logs in as 'john' you would need to create his dashboard in the form called 'aro_myadmin_dash_john'.
+
+Alternatively, you can create a custom dashboard for all users of a given privilage level by creating a form called *aro_myadmin_dash_PRIVLEVEL* where PRIVLEVEL is a numeral representing the priv level the form will be used for.
+
+Create a form with the name <strong>aro_myadmin_dash</strong> to overwrite the default plugin dashboard. This dash form will be used if there is no overriding user dash or priv-level dash.
+
 
 h2. Special Thanks
 
