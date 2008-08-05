@@ -518,9 +518,28 @@ function aro_tabber($label,$tabevent,$event){
 
 function aro_end_page($content){
 	$out[] = ($content) ? '</div><!-- end content -->' : '';
-	$out[] = '<p class="textpattern">Powered by <a href="http://www.textpattern.com">Textpattern</a></p>';
-	$out[] = '</div><!-- end body -->';
+	if(is_callable('aro_custom_end_page'))
+		$out[] = aro_custom_end_page($content);
+	else
+		{
+		global $DB , $event;
+		if( !$DB )
+			$DB=new DB;
 
+		$default_para = '<p class="textpattern">Powered by <a href="http://www.textpattern.com">Textpattern</a></p>';
+		echo '<p>'.$event.'</p>'.br.n;
+		if($event==='plugin')
+			$out[] = $default_para;
+		else
+			{
+			# Try using the custom forms for the page_ends...
+			$form = ($content) ? 'aro_myadmin_end_page' : 'aro_myadmin_end_page_login';
+			$html = safe_field('Form','txp_form','name=\''.$form.'\'');
+
+			$out[] = (!$html || ($event==='plugin')) ? $default_para : $html;
+			}
+		}
+	$out[] = '</div><!-- end body -->';
 	return join(n, $out);
 }
 
@@ -545,6 +564,10 @@ You can give individual adminstrative users their own dashboard form by creating
 Alternatively, you can create a custom dashboard for all users of a given privilage level by creating a form called *aro_myadmin_dash_PRIVLEVEL* where PRIVLEVEL is a numeral representing the priv level the form will be used for.
 
 Create a form with the name <strong>aro_myadmin_dash</strong> to overwrite the default plugin dashboard. This dash form will be used if there is no overriding user dash or priv-level dash.
+
+It is possible to override the default string used by aro_myadmin by creating one or both of two forms. 'aro_myadmin_page_end_login' will be used on the admin login screen but it isn't parsed like public-side forms so <strong>don't use txp tags in this form, it must contain only XHTML </strong>. <br />'aro_myadmin_page_end' will be used on all other admin screens and once again it isn't parsed so you can't used tags in there either. However, if you are using the MLP Pack, you can use the '##snippet##' style of snippet to localise the content of the form.
+
+It is also possible to use a custom function to provide the footer content. You just need to write a php function called 'aro_custom_end_page' that takes one argument that will be '' on the login screen and <em>false</em> for all other pages. Your function will need to return a string containing valid XHTML for the footer. If your routine crashes you'll get blank pages.
 
 h2. Special Thanks
 
