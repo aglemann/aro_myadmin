@@ -11,6 +11,57 @@ $plugin['type'] = '1';
 
 # --- BEGIN PLUGIN CODE ---
 
+// MLP
+global $aro_myadmin_strings;
+if (!is_array($aro_myadmin_strings))
+{
+	$aro_myadmin_strings = array(
+		'login_welcome' => 'Welcome <strong>{user}</strong>. If you are not {user}, <strong><a href="?logout=1">logout</a></strong> immediately.',
+	);
+}
+
+define( 'ARO_MYADMIN_PREFIX' , 'aro_myadmin' );
+
+register_callback( 'aro_myadmin_enumerate_strings' , 'l10n.enumerate_strings' );
+function aro_myadmin_enumerate_strings($event , $step='' , $pre=0)
+{
+	global $aro_myadmin_strings;
+	$r = array	(
+				'owner'		=> 'aro_myadmin',
+				'prefix'	=> ARO_MYADMIN_PREFIX,
+				'lang'		=> 'en-gb',
+				'event'		=> 'admin',
+				'strings'	=> $aro_myadmin_strings,
+				);
+	return $r;
+}
+function aro_myadmin_gTxt($what,$args = array())
+{
+	global $aro_myadmin_strings, $textarray;
+	
+	$what = strtolower($what);
+	$key = ARO_MYADMIN_PREFIX . '-' . $what;
+
+	if (isset($textarray[$key]))
+	{
+		$str = $textarray[$key];
+	}
+	else
+	{
+		if (isset($aro_myadmin_strings[$what]))
+			$str = $aro_myadmin_strings[$what];
+		elseif (isset($textarray[$what]))
+			$str = $textarray[$what];
+		else
+			$str = $what;
+	}
+
+	if( !empty($args) )
+		$str = strtr( $str , $args );
+
+	return $str;
+}
+
 if (@txpinterface == 'admin'){
 	add_privs('aro_myadmin_js','1,2,3,4,5,6');
 	add_privs('dashboard','1,2,3,4,5,6');
@@ -39,7 +90,7 @@ function aro_dashboard() {
 	$prev = gps('prev');
 	$msg = '';
 	if( $prev === 'login' ) {
-		$msg = "Welcome <strong>$txp_user</strong>. If you are not $txp_user, <strong><a href=\"?logout=1\">logout</a></strong> immediately.";
+		$msg = aro_myadmin_gTxt('login_welcome',array('{user}'=>$txp_user));
 	}
 	echo pagetop('Textpattern' , $msg);
 
