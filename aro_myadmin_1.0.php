@@ -23,7 +23,7 @@ if (@txpinterface == 'admin'){
 }
 
 function aro_bootstrap() {
-	if ($_POST && isset($_POST['p_password'])) header('Location: ?event=dashboard');
+	if ($_POST && isset($_POST['p_password'])) header('Location: ?event=dashboard&prev=login');
 }
 
 function aro_load_dash( $label , $dash , $debug=false ) {
@@ -36,12 +36,18 @@ function aro_dashboard() {
 	include_once txpath.'/publish.php';
 	global $txp_user;
 
-	echo pagetop("Textpattern");
+	$prev = gps('prev');
+	$msg = '';
+	if( $prev === 'login' ) {
+		$msg = "Welcome <strong>$txp_user</strong>. If you are not $txp_user, <strong><a href=\"?logout=1\">logout</a></strong> immediately.";
+	}
+	echo pagetop('Textpattern' , $msg);
 
 	$debug = false;
 	$html = false;
 
 	if( $debug ) echo 'User: ['.$txp_user.']'.br.n;
+	if( $debug ) echo 'Msge: ['.$msg.']'.br.n;
 
 	# Try loading user-specific form, then priv-specific, else global, else default...
 	$label = 'user-specific';
