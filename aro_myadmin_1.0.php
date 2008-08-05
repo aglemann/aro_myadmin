@@ -546,7 +546,6 @@ Alternatively, you can create a custom dashboard for all users of a given privil
 
 Create a form with the name <strong>aro_myadmin_dash</strong> to overwrite the default plugin dashboard. This dash form will be used if there is no overriding user dash or priv-level dash.
 
-
 h2. Special Thanks
 
 Special thanks to Steve AKA "Netcarver":http://txp-plugins.netcarving.com/ for his work getting the code to play nice with other TXP plugins.
