@@ -141,7 +141,7 @@ function aro_dashboard() {
 		$html = <<<html
 <div class="dashboard">
   <div>
-    <h2><txp:php>echo gTxt('articles');</txp:php></h2>
+	<h2><txp:php>echo gTxt('recent_articles');</txp:php></h2>
 
 		<txp:php>
 \$out = array();
@@ -149,7 +149,6 @@ function aro_dashboard() {
 \$rows = safe_rows_start("Title, ID",'textpattern',"1=1 ORDER BY LastMod DESC LIMIT 5");
 
 if (\$rows){
-	\$out[] = '<h3>'.gTxt('recent_articles').'</h3>';
 	\$out[] = '<ul class="plain-list">';
 
 	while (\$row = nextRow(\$rows)){
