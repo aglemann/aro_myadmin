@@ -19,6 +19,7 @@ if (!is_array($aro_myadmin_strings))
 		'login_welcome' => 'Welcome <strong>{name}</strong>/{user}. If you are not {name}, <strong><a href="?logout=1">logout</a></strong> immediately.',
 		'footer_login'	=> '<p class="textpattern">Powered by <a href="http://www.textpattern.com">Textpattern</a></p>',
 		'footer_other'	=> '<p class="textpattern">Powered by <a href="http://www.textpattern.com">Textpattern</a></p>',
+		'tab_dashboard'	=> 'Dashboard',
 	);
 }
 
@@ -501,7 +502,7 @@ function aro_pagetop($message){
 	if (!$bm && $txp_user){
 		// primary navigation
 		$out[] = '<ul id="nav-primary">';
-		$out[] = has_privs('tab.content') ? aro_areatab(gTxt('Dashboard'), 'dashboard', 'dashboard', $area) : '';
+		$out[] = has_privs('tab.content') ? aro_areatab(aro_myadmin_gTxt('tab_dashboard'), 'dashboard', 'dashboard', $area) : '';
 		$out[] = has_privs('tab.content') ? aro_areatab(gTxt('tab_content'), 'content', 'article', $area) : '';
 		$out[] = has_privs('tab.presentation') ? aro_areatab(gTxt('tab_presentation'), 'presentation', 'page', $area) : '';
 		$out[] = '</ul>';
