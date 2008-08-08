@@ -609,7 +609,7 @@ Just copy myadmin.css to the /textpattern folder and the included images to the 
 
 If you want the real deal though, you will have to add 1 line to /textpattern/index.php:
 
-@load_plugin(basename("aro_myadmin"));@
+<code class="sed_code_tag"><notextile>load_plugin(basename("aro_myadmin"));</code>
 
 Add the above to ~line 88 of index.php - it must come before doAuth();
 
