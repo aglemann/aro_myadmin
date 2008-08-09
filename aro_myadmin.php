@@ -471,6 +471,9 @@ function aro_myadmin($buffer){
 function aro_pagetop($message){
 	global $siteurl,$sitename,$txp_user,$event;
 
+	$mlp = is_callable('l10n_installed') && is_callable('_l10n_inject_switcher_form');
+	$mlp = ( $mlp ) ? l10n_installed() : false ;
+
 	$area = gps('event');
 	$event = (!$event) ? 'article' : $event;
 	$bm = gps('bm');
@@ -480,7 +483,6 @@ function aro_pagetop($message){
 	$GLOBALS['privs'] = $privs;
 
 	$areas = areas();
-
 	foreach ($areas as $k => $v){
 		if (in_array($event, $v)){
 			$area = $k;
@@ -491,10 +493,7 @@ function aro_pagetop($message){
 	$out[] = '<div id="header">';
 	$out[] = '<h1 class="branding"><a href="'.hu.'" title="'.gTxt('tab_view_site').'"><img src="txp_img/sitelink.gif" alt="'.$sitename.'" /></a></h1>';
 
-	if ($txp_user)
-	{
-		$mlp = is_callable('l10n_installed') && is_callable('_l10n_inject_switcher_form');
-		$mlp = ( $mlp ) ? l10n_installed() : false ;
+	if ($txp_user) {
 		$ev = (has_privs('prefs')) ? 'prefs' : 'admin' ;
 		$lang_sel = ($mlp) ? _l10n_inject_switcher_form() . ' | ' : '';
 		$out[] = '<div class="user">'.$txp_user.' - '.$lang_sel.'<a href="index.php?event='.$ev.'">'.gTxt('prefs').'</a> | <a href="index.php?logout=1">'.gTxt('logout').'</a></div>';
@@ -528,10 +527,15 @@ function aro_pagetop($message){
 	}
 
 	$out[] = '<div id="content">';
-
 	if ($message) $out[] = '<div class="message">'.$message.'</div>';
 
-	return join(n, $out);
+	$page = join(n, $out);
+
+	if( $mlp && is_callable('_l10n_rename_articles_tab') ) {	# Change the text of the "articles" tab...
+		$page = _l10n_rename_articles_tab($page);
+	}
+
+	return $page;
 }
 
 function aro_areatab($label,$event,$tarea,$area){
