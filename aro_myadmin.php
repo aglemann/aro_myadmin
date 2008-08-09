@@ -493,8 +493,10 @@ function aro_pagetop($message){
 
 	if ($txp_user)
 	{
+		$mlp = is_callable('l10n_installed') && is_callable('_l10n_inject_switcher_form');
+		$mlp = ( $mlp ) ? l10n_installed() : false ;
 		$ev = (has_privs('prefs')) ? 'prefs' : 'admin' ;
-		$lang_sel = (is_callable('_l10n_inject_switcher_form')) ? _l10n_inject_switcher_form() . ' | ' : '';
+		$lang_sel = ($mlp) ? _l10n_inject_switcher_form() . ' | ' : '';
 		$out[] = '<div class="user">'.$txp_user.' - '.$lang_sel.'<a href="index.php?event='.$ev.'">'.gTxt('prefs').'</a> | <a href="index.php?logout=1">'.gTxt('logout').'</a></div>';
 	}
 
